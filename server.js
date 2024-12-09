@@ -1,8 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
+
+// Allow all origins
+app.use(cors());
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -11,14 +15,13 @@ app.use(express.json());
 const userRoutes = require("./src/routes/userRoutes");
 const goalsRoutes = require("./src/routes/goalsRoutes");
 const quarterlGoalRoutes = require("./src/routes/quarterlyGoalsRoutes");
-
+const employeeDetailsRoutes = require("./src/routes/employeeDetailsRoutes");
 
 // Use routes
 app.use("/api/users", userRoutes);
-
-app.use("/api/goals",goalsRoutes);
-
-app.use("/api/goals/quarter",quarterlGoalRoutes);
+app.use("/api/goals", goalsRoutes);
+app.use("/api/goals/quarter", quarterlGoalRoutes);
+app.use("/api/users/detail", employeeDetailsRoutes);
 
 // Connect to MongoDB
 mongoose

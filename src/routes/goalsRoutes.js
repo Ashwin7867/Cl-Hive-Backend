@@ -29,7 +29,7 @@ router.post("/create", async (req, res) => {
 });
 
 // Update a goal by ID
-router.put("/update/:id", async (req, res) => {
+router.post("/update/:id", async (req, res) => {
     try {
         const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedGoal) {
@@ -42,7 +42,7 @@ router.put("/update/:id", async (req, res) => {
 });
 
 // Fetch goals by emp_id
-router.get("/fetch/:emp_id", async (req, res) => {
+router.post("/fetch/:emp_id", async (req, res) => {
     try {
         const { emp_id } = req.params;
         const goals = await Goal.find({ emp_id });
@@ -57,7 +57,7 @@ router.get("/fetch/:emp_id", async (req, res) => {
 
 
 // Fetch goals by emp_id and year
-router.get("/fetch/:emp_id/:year", async (req, res) => {
+router.post("/fetch/:emp_id/:year", async (req, res) => {
     try {
         const { emp_id, year } = req.params;
         const startDate = new Date(`${year}-01-01`);
