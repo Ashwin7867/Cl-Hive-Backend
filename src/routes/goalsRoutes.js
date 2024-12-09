@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
 });
 
 // Get all goals
-router.get("/goals", async (req, res) => {
+router.get("/fetch", async (req, res) => {
     try {
         const goals = await Goal.find();
         res.json({ goals });
@@ -18,7 +18,7 @@ router.get("/goals", async (req, res) => {
 });
 
 // Create a new goal
-router.post("/goals", async (req, res) => {
+router.post("/create", async (req, res) => {
     try {
         const newGoal = new Goal(req.body);
         const savedGoal = await newGoal.save();
@@ -29,7 +29,7 @@ router.post("/goals", async (req, res) => {
 });
 
 // Update a goal by ID
-router.put("/goals/:id", async (req, res) => {
+router.put("/update/:id", async (req, res) => {
     try {
         const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedGoal) {
@@ -40,6 +40,45 @@ router.put("/goals/:id", async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
+// Fetch goals by emp_id
+router.get("/fetch/:emp_id", async (req, res) => {
+    try {
+        const { emp_id } = req.params;
+        const goals = await Goal.find({ emp_id });
+        if (goals.length === 0) {
+            return res.status(404).json({ message: "No goals found for the given emp_id" });
+        }
+        res.json({ goals });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// Fetch goals by emp_id and year
+router.get("/fetch/:emp_id/:year", async (req, res) => {
+    try {
+        const { emp_id, year } = req.params;
+        const startDate = new Date(`${year}-01-01`);
+        const endDate = new Date(`${year}-12-31T23:59:59.999Z`);
+        
+        const goals = await Goal.find({
+            emp_id,
+            startDate: { $gte: startDate },
+            endDate: { $lte: endDate }
+        });
+
+        if (goals.length === 0) {
+            return res.status(404).json({ message: "No goals found for the given emp_id and year" });
+        }
+
+        res.json({ goals });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // Delete a goal by ID
 router.delete("/goals/:id", async (req, res) => {
