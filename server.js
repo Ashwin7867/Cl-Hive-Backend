@@ -10,11 +10,15 @@ app.use(express.json());
 // Import routes
 const userRoutes = require("./src/routes/userRoutes");
 const goalsRoutes = require("./src/routes/goalsRoutes");
+const quarterlGoalRoutes = require("./src/routes/quarterlyGoalsRoutes");
+
 
 // Use routes
 app.use("/api/users", userRoutes);
 
-app.use("/api/goals",goalsRoutes)
+app.use("/api/goals",goalsRoutes);
+
+app.use("/api/goals/quarter",quarterlGoalRoutes);
 
 // Connect to MongoDB
 mongoose
